@@ -1,45 +1,56 @@
-{% set name = "<PLEASE ADD PKG NAME>" %}
-{% set version = "<PLEASE ADD PKG VERSION>" %}
+{% set name = "xkbcomp" %}
+{% set version = "1.4.7" %}
 
 package:
   name: {{ name|lower }}
   version: {{ version }}
 
 source:
-  url: https://pypi.io/packages/source/{{ name[0] }}/{{ name }}/{{ name }}-{{ version }}.tar.gz
-  sha256: <sha256>
+  url: https://www.x.org/releases/individual/app/xkbcomp-{{ version }}.tar.xz
+  sha256: 0a288114e5f44e31987042c79aecff1ffad53a8154b8ec971c24a69a80f81f77
 
 build:
   number: 0
-  script: {{ PYTHON }} -m pip install . -vv --no-deps --no-build-isolation
-  skip: True  # [py<38]
+  skip: true  # [win]
 
 requirements:
+  build:
+    - {{ stdlib('c') }}
+    - {{ compiler('c') }}
+    - make
+    - pkg-config
   host:
-    - python
-    - pip
+    - xorg-libx11 1.8.12
+    - libxkbfile 1.1.0
   run:
-    - python
+    - xorg-libx11
+    - libxkbfile
 
 test:
-  imports:
-    - {{ name.replace('-', '.') }}
-  requires:
-    - pip
   commands:
-    - pip check
+    - xkbcomp -help
+    - test -f $PREFIX/bin/xkbcomp
 
 about:
-  home: <PLEASE ADD HOME URL>
-  summary: <PLEASE ADD SUMMARY>
+  home: https://www.x.org/
+  summary: X Keyboard Compiler
   description: |
-    <PLEASE ADD DESCRIPTION>
-  license: <PLEASE ADD LICENSE>
-  license_family: <PLEASE ADD LICENSE_FAMILY>
-  license_file: <PLEASE_ADD_LICENSE_FILE>
-  dev_url: <PLEASE ADD DEV URL>
-  doc_url: <PLEASE ADD DOC URL>
+    The X Keyboard (XKB) Extension essentially replaces the core protocol definition 
+    of a keyboard. The extension makes it possible to specify clearly and explicitly 
+    most aspects of keyboard behaviour on a per-key basis, and to track more closely 
+    the logical and physical state of a keyboard. It also includes a number of 
+    keyboard controls designed to make keyboards more accessible to people with 
+    physical impairments.
+    
+    xkbcomp is used to compile XKB keyboard description files into formats usable 
+    by the server or client libraries.
+  license: MIT
+  license_family: MIT
+  license_file: COPYING
+  dev_url: https://gitlab.freedesktop.org/xorg/app/xkbcomp
+  doc_url: https://www.x.org/releases/current/doc/man/man1/xkbcomp.1.xhtml
 
 extra:
   recipe-maintainers:
-    - Jrice1317
+    - elundby45
+
