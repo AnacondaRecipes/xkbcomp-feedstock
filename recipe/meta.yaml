@@ -2,7 +2,7 @@
 {% set version = "1.4.7" %}
 
 package:
-  name: {{ name|lower }}
+  name: {{ name }}
   version: {{ version }}
 
 source:
@@ -10,7 +10,7 @@ source:
   sha256: 0a288114e5f44e31987042c79aecff1ffad53a8154b8ec971c24a69a80f81f77
 
 build:
-  number: 0
+  number: 1
   skip: true  # [win]
 
 requirements:
@@ -20,8 +20,8 @@ requirements:
     - make
     - pkg-config
   host:
-    - xorg-libx11 1.8.12
-    - libxkbfile 1.1.0
+    - xorg-libx11 {{ xorg_libx11 }}
+    - libxkbfile {{ libxkbfile }}
   run:
     - xorg-libx11
     - libxkbfile
